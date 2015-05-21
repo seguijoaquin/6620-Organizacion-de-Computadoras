@@ -3,6 +3,6 @@
 
 #include "pila.h"
 
-extern int invertirEImprimir(FILE* datos);
+extern int InvertirEImprimir(FILE* datos);
 
 #endif /* INVERTIREIMPRIMIR_H_ */
