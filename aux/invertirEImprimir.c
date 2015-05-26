@@ -6,21 +6,21 @@ int InvertirEImprimir(FILE *datos) {
     // Se crea una pila auxiliar para apilar los caracteres y una general para todo el texto
     pila_t *pilaAux = CrearPila();
     pila_t *pilaGeneral = CrearPila();
-    if (pilaGeneral == NULL || pilaAux == NULL) {
-        if (pilaGeneral == NULL && pilaAux == NULL) {
+    if (pilaGeneral == NULL || pilaAux == NULL) { //linea 44
+        if (pilaGeneral == NULL && pilaAux == NULL) { //askAmbasNull
             DestruirPila(pilaGeneral);
             DestruirPila(pilaAux);
         } else if (pilaGeneral == NULL) {
-            DestruirPila(pilaGeneral);
-        } else {
-            DestruirPila(pilaAux);
-        }
+           	DestruirPila(pilaGeneral);
+        	} else {
+            	DestruirPila(pilaAux);
+        	}
         return EXIT_FAILURE;
     }
 
     // Se apila el caracter en la pila auxiliar hasta llegar al final de la linea, luego esta
     // pila pasa a la pila general, de manera de quedar ordenada.
-    while(!feof(datos)){
+    while(!feof(datos)){ 
         int caracter = fgetc(datos); //Se declara int para incluir al byte 0x00
         if (caracter != EOF) {
             if (!Apilar(pilaAux,caracter)) {
@@ -38,7 +38,7 @@ int InvertirEImprimir(FILE *datos) {
         }
     }
 
-    if (!PilaEstaVacia(pilaAux)) {
+    if (!PilaEstaVacia(pilaAux)) { //Ask pila vacia
         if (!CambiarDePila(pilaGeneral,pilaAux)) {
                 DestruirPila(pilaGeneral);
                 DestruirPila(pilaAux);

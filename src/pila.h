@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <mips/regdef.h>
+#include <sys/syscall.h>
+
+
 
 #define PILA_TAM_INICIAL 30
 #define PILA_FACTOR 2
