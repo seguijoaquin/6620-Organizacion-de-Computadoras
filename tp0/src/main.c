@@ -46,7 +46,7 @@ void parsearOpciones() {
   } while (next_option != -1);
 }
 
-int reservoMemoriaMatriz(float*** matriz) {
+int reservoMemoriaMatriz(float*** matriz, int filas, int columnas) {
 	(*matriz) = (float**)malloc(filas*sizeof(float*));
 	if (!(*matriz)) {
 		fprintf(stderr, "Fallo en malloc\n", );
@@ -78,12 +78,12 @@ int procesarEntrada(float*** matriz) {
 	if (scanf("%i%c%i ",&fila,&separador,&columna) != 3)
 		return EXIT_FAILURE;
 	int salida;
-	salida = reservoMemoriaMatriz(matriz);
+	salida = reservoMemoriaMatriz(matriz,fila,columna);
 	if (salida) {
 		int i;
 		int j;
 		int count = 0;
-		while (scanf("%g ",matriz[i][j])&&(i<fila)&&(j<columna)) {
+		while (scanf("%g ",matriz[i][j])&&(i<fila)) {
 			j++;
 			count++;
 			if (j==columna) {
@@ -100,8 +100,17 @@ int procesarEntrada(float*** matriz) {
 
 int main(int argc, char *argv[]) {
     parsearOpciones();
-    int salida;
-		float** matriz;
-		salida = procesarEntrada(&matriz);
-    return salida;
+    int salida_1;
+		float** matriz_1;
+		salida_1 = procesarEntrada(&matriz_1);
+		if(salida_1) return EXIT_FAILURE;
+
+		float** matriz_2;
+		int salida_2;
+		salida_2 = procesarEntrada(&matriz_2);
+		if (salida_2) return EXIT_FAILURE;
+		//Verificar dimensiones
+		//Multiplicar
+		//Repetir
+    return EXIT_SUCCESS;
 }
