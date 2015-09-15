@@ -7,16 +7,16 @@
 void printManual(){
 	printf("Usage:\n tp0 -h\n");
 	printf(" tp0 -V\n");
-	printf("tp0 < in_file > out_file\n", );
+	printf("tp0 < in_file > out_file\n");
 	printf("Options:\n");
 	printf(" -V, --version 	Print version and quit.\n");
 	printf(" -h, --help  	Print this information and quit.\n");
 	printf("Examples:\n");
 	printf(" tp0 < in.txt > out.txt\n");
-	printf("cat in.txt | tp0 > out.txt\n", );
+	printf("cat in.txt | tp0 > out.txt\n");
 }
 
-void parsearOpciones() {
+void parsearOpciones(int argc, char* argv[]) {
   int next_option;
   const char* const short_options = "hV";
   const struct option long_options[] = {
@@ -46,10 +46,10 @@ void parsearOpciones() {
   } while (next_option != -1);
 }
 
-int reservoMemoriaMatriz(float*** matriz, int filas, int columnas) {
+int alocarMatriz(float*** matriz, int filas, int columnas) {
 	(*matriz) = (float**)malloc(filas*sizeof(float*));
 	if (!(*matriz)) {
-		fprintf(stderr, "Fallo en malloc\n", );
+		fprintf(stderr, "Fallo en malloc\n");
 		return EXIT_FAILURE;
 	}
 	int i; //Recorre filas
@@ -63,54 +63,108 @@ int reservoMemoriaMatriz(float*** matriz, int filas, int columnas) {
 				free((*matriz[j]));
 			}
 			free((*matriz));
-			fprintf(stderr, "Fallo en malloc\n", );
+			fprintf(stderr, "Fallo en malloc\n");
 			return EXIT_FAILURE;
 		}
 	}
 	return EXIT_SUCCESS;
 }
 
-int procesarEntrada(float*** matriz) {
-	int fila;
-	int columna;
-	char separador;
-	//Si no leo tres argumentos [dimension][separador][dimension] salgo
-	if (scanf("%i%c%i ",&fila,&separador,&columna) != 3)
-		return EXIT_FAILURE;
-	int salida;
-	salida = reservoMemoriaMatriz(matriz,fila,columna);
-	if (salida) {
+int llenarMatriz(float** matriz, int fila, int columna) {
 		int i;
 		int j;
-		int count = 0;
-		while (scanf("%g ",matriz[i][j])&&(i<fila)) {
-			j++;
-			count++;
-			if (j==columna) {
+		int cantidadElementos = 0;
+		i = 0;
+		j = 0;
+		while (scanf("%g ",&matriz[i][j])&&(i<fila)) {
+			cantidadElementos++;
+			if (j==(columna-1)) {
 				j=0;
 				i++;
 			}
+			j++;
 		}
-		if (count < ((i+1)*(j+1))) {
-			salida = EXIT_FAILURE;
+		if (cantidadElementos < ((fila)*(columna))) {
+			return EXIT_FAILURE;
 		}
-	}
-	return salida;
+	return EXIT_SUCCESS;
 }
 
+void liberarMatriz(float** matriz, int fila) {
+	int i;
+	for(i=0;i<fila;++i) {
+		free(matriz[i]);
+	}
+	free(matriz);
+}
+void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int fila2, int columna2) {
+	int i;
+	int j;
+	int k;
+	float accum;
+	printf("%ix%i ",fila1,columna2);
+	for(i=0;i<fila1;i++) {
+		for(j=0;j<columna2;j++) {
+			accum = 0;
+			for(k=0;k<columna1;k++) {
+				accum = accum + matriz1[i][k] + matriz2[k][j];
+			}
+			printf("%g ",accum);
+		}
+	}
+	printf("\n");
+}
 int main(int argc, char *argv[]) {
-    parsearOpciones();
-    int salida_1;
-		float** matriz_1;
-		salida_1 = procesarEntrada(&matriz_1);
-		if(salida_1) return EXIT_FAILURE;
-
-		float** matriz_2;
-		int salida_2;
-		salida_2 = procesarEntrada(&matriz_2);
-		if (salida_2) return EXIT_FAILURE;
-		//Verificar dimensiones
-		//Multiplicar
+    parsearOpciones(argc,argv);
+		float** matriz1;
+		int fila1;
+		int columna1;
+		int cant;
+		cant =	scanf("%i%*c%i ",&fila1,&columna1);
+		if (cant != 2) {
+			return EXIT_FAILURE;
+		}
+		int alocar;
+		alocar =	alocarMatriz(&matriz1,fila1,columna1);
+		if (alocar) {
+			return EXIT_FAILURE;
+		}
+		int llenar;
+		llenar = llenarMatriz(matriz1,fila1,columna1);
+		if (llenar) {
+			liberarMatriz(matriz1,fila1);
+			return EXIT_FAILURE;
+		}
+		//Repito para segunda matriz
+		float** matriz2;
+		int fila2;
+		int columna2;
+		cant = scanf("%i%*c%i ",&fila2,&columna2);
+		if (cant != 2) {
+			liberarMatriz(matriz1,fila1);
+			return EXIT_FAILURE;
+		}
+		alocar = alocarMatriz(&matriz2,fila2,columna2);
+		if (alocar) {
+			liberarMatriz(matriz1,fila1);
+			return EXIT_FAILURE;
+		}
+		llenar =	llenarMatriz(matriz2,fila2,columna2);
+		if (llenar) {
+			liberarMatriz(matriz1,fila1);
+			liberarMatriz(matriz2,fila2);
+			return EXIT_FAILURE;
+		}
+		if(columna1 == fila2) {
+			//Multiplicar
+			multiplicar(matriz1,fila1,columna1,matriz2,fila2,columna2);
+			liberarMatriz(matriz1,fila1);
+			liberarMatriz(matriz2,fila2);
+		} else {
+			liberarMatriz(matriz1,fila1);
+			liberarMatriz(matriz2,fila2);
+			return EXIT_FAILURE;
+		}
 		//Repetir
     return EXIT_SUCCESS;
 }
