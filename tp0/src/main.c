@@ -50,7 +50,6 @@ float** alocarMatriz( int filas, int columnas) {
 	float** matriz;
 	matriz = (float**)malloc(filas*sizeof(float*));
 	if (!matriz) {
-		fprintf(stderr, "Fallo en malloc\n");
 		return NULL;
 	}
 	int i; //Recorre filas
@@ -64,7 +63,6 @@ float** alocarMatriz( int filas, int columnas) {
 				free(matriz[j]);
 			}
 			free(matriz);
-			fprintf(stderr, "Fallo en malloc\n");
 			return NULL;
 		}
 	}
@@ -122,24 +120,28 @@ void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int 
 	printf("\n");
 }
 int main(int argc, char *argv[]) {
-    parsearOpciones(argc,argv);
-		//Construyo la primera matriz
-		float** matriz1;
-		int fila1;
-		int columna1;
-		int cant;
+  parsearOpciones(argc,argv);
+	//Construyo la primera matriz
+	float** matriz1;
+	int fila1;
+	int columna1;
+	int cant;
+	do {
 		cant =	scanf("%i%*c%i ",&fila1,&columna1);
 		if (cant != 2) {
+			fprintf(stderr, "Fallo al leer dimensiones\n");
 			return EXIT_FAILURE;
 		}
 		matriz1 =	alocarMatriz(fila1,columna1);
 		if (!matriz1) {
+			fprintf(stderr, "Fallo en malloc\n");
 			return EXIT_FAILURE;
 		}
 		int llenar;
 		llenar = llenarMatriz(matriz1,fila1,columna1);
 		if (llenar) {
 			liberarMatriz(matriz1,fila1);
+			fprintf(stderr, "Cantidad elementos menor a dimensiones de matriz\n");
 			return EXIT_FAILURE;
 		}
 		//Repito para segunda matriz
@@ -149,17 +151,20 @@ int main(int argc, char *argv[]) {
 		cant = scanf("%i%*c%i ",&fila2,&columna2);
 		if (cant != 2) {
 			liberarMatriz(matriz1,fila1);
+			fprintf(stderr, "Fallo al leer dimensiones\n");
 			return EXIT_FAILURE;
 		}
 		matriz2 = alocarMatriz(fila2,columna2);
 		if (!matriz2) {
 			liberarMatriz(matriz1,fila1);
+			fprintf(stderr, "Fallo en malloc\n");
 			return EXIT_FAILURE;
 		}
 		llenar =	llenarMatriz(matriz2,fila2,columna2);
 		if (llenar) {
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
+			fprintf(stderr, "Cantidad elementos menor a dimensiones de matriz\n");
 			return EXIT_FAILURE;
 		}
 		if(columna1 == fila2) {
@@ -170,8 +175,10 @@ int main(int argc, char *argv[]) {
 		} else {
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
+			fprintf(stderr, "Dimensiones no compatibles para multiplicar\n");
 			return EXIT_FAILURE;
 		}
+	} while(cant != EOF);
 		//Repetir
     return EXIT_SUCCESS;
 }
