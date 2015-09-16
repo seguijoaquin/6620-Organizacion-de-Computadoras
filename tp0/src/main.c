@@ -46,28 +46,29 @@ void parsearOpciones(int argc, char* argv[]) {
   } while (next_option != -1);
 }
 
-int alocarMatriz(float*** matriz, int filas, int columnas) {
-	(*matriz) = (float**)malloc(filas*sizeof(float*));
-	if (!(*matriz)) {
+float** alocarMatriz( int filas, int columnas) {
+	float** matriz;
+	matriz = (float**)malloc(filas*sizeof(float*));
+	if (!matriz) {
 		fprintf(stderr, "Fallo en malloc\n");
-		return EXIT_FAILURE;
+		return NULL;
 	}
 	int i; //Recorre filas
 	int j; //Recorre columnas
 	for(i=0;i<filas;i++){
-		(*matriz[i]) = (float*)malloc(columnas*sizeof(float));
+		matriz[i] = (float*)malloc(columnas*sizeof(float));
 		//Si falla el malloc, libero todo lo reservado anteriormente
-		if(!(*matriz[i])) {
+		if(!matriz[i]) {
 			int j;
 			for (j=0;j<i;j++) {
-				free((*matriz[j]));
+				free(matriz[j]);
 			}
-			free((*matriz));
+			free(matriz);
 			fprintf(stderr, "Fallo en malloc\n");
-			return EXIT_FAILURE;
+			return NULL;
 		}
 	}
-	return EXIT_SUCCESS;
+	return matriz;
 }
 
 int llenarMatriz(float** matriz, int fila, int columna) {
@@ -76,7 +77,7 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 		int cantidadElementos = 0;
 		i = 0;
 		j = 0;
-		while (scanf("%g ",&matriz[i][j])&&(i<fila)) {
+		while (scanf("%f ",&matriz[i][j])&&(i<fila)) {
 			cantidadElementos++;
 			if (j==(columna-1)) {
 				j=0;
@@ -124,9 +125,8 @@ int main(int argc, char *argv[]) {
 		if (cant != 2) {
 			return EXIT_FAILURE;
 		}
-		int alocar;
-		alocar =	alocarMatriz(&matriz1,fila1,columna1);
-		if (alocar) {
+		matriz1 =	alocarMatriz(fila1,columna1);
+		if (!matriz1) {
 			return EXIT_FAILURE;
 		}
 		int llenar;
@@ -144,8 +144,8 @@ int main(int argc, char *argv[]) {
 			liberarMatriz(matriz1,fila1);
 			return EXIT_FAILURE;
 		}
-		alocar = alocarMatriz(&matriz2,fila2,columna2);
-		if (alocar) {
+		matriz2 = alocarMatriz(fila2,columna2);
+		if (!matriz2) {
 			liberarMatriz(matriz1,fila1);
 			return EXIT_FAILURE;
 		}
