@@ -104,7 +104,7 @@ void liberarMatriz(float** matriz, int fila) {
 	}
 	free(matriz);
 }
-void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int fila2, int columna2) {
+void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int columna2) {
 	int i;
 	int j;
 	int k;
@@ -123,6 +123,7 @@ void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int 
 }
 int main(int argc, char *argv[]) {
     parsearOpciones(argc,argv);
+		//Construyo la primera matriz
 		float** matriz1;
 		int fila1;
 		int columna1;
@@ -163,7 +164,7 @@ int main(int argc, char *argv[]) {
 		}
 		if(columna1 == fila2) {
 			//Multiplicar
-			multiplicar(matriz1,fila1,columna1,matriz2,fila2,columna2);
+			multiplicar(matriz1,fila1,columna1,matriz2,columna2);
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
 		} else {
