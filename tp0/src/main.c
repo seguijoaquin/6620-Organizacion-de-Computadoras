@@ -114,7 +114,7 @@ void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int 
 		for(j=0;j<columna2;j++) {
 			accum = 0;
 			for(k=0;k<columna1;k++) {
-				accum = accum + matriz1[i][k] + matriz2[k][j];
+				accum = accum + (matriz1[i][k] * matriz2[k][j]);
 			}
 			printf("%g ",accum);
 		}
