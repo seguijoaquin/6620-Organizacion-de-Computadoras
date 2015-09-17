@@ -126,8 +126,9 @@ int main(int argc, char *argv[]) {
 	int fila1;
 	int columna1;
 	int cant;
+	cant =	scanf("%i%*c%i ",&fila1,&columna1);
 	do {
-		cant =	scanf("%i%*c%i ",&fila1,&columna1);
+		//cant =	scanf("%i%*c%i ",&fila1,&columna1);
 		if (cant != 2) {
 			fprintf(stderr, "Fallo al leer dimensiones\n");
 			return EXIT_FAILURE;
@@ -178,6 +179,7 @@ int main(int argc, char *argv[]) {
 			fprintf(stderr, "Dimensiones no compatibles para multiplicar\n");
 			return EXIT_FAILURE;
 		}
+		cant =	scanf("%i%*c%i ",&fila1,&columna1);
 	} while(cant != EOF);
 		//Repetir
     return EXIT_SUCCESS;
