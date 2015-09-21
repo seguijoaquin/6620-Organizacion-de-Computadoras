@@ -75,8 +75,12 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 		i = 0;
 		j = 0;
 		bool exito = true;
-		while (i<fila && exito) {
-			if (scanf("%f\n",&matriz[i][j])) {
+		float valor;
+		int escan;
+		while (exito && i<fila && j<columna) {
+			escan = scanf("%f ",&valor );
+			if (escan != EOF) {
+				matriz[i][j] = valor;
 				cantidadElementos++;
 				if (j==columna-1) {
 					j=0;
