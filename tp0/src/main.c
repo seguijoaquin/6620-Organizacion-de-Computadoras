@@ -128,7 +128,6 @@ int main(int argc, char *argv[]) {
 	int cant;
 	cant =	scanf("%i%*c%i ",&fila1,&columna1);
 	do {
-		//cant =	scanf("%i%*c%i ",&fila1,&columna);
 		if (cant != 2) {
 			fprintf(stderr, "Fallo al leer dimensiones\n");
 			return EXIT_FAILURE;
