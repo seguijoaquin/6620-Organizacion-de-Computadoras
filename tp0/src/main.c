@@ -53,7 +53,6 @@ float** alocarMatriz( int filas, int columnas) {
 		return NULL;
 	}
 	int i; //Recorre filas
-	int j; //Recorre columnas
 	for(i=0;i<filas;i++){
 		matriz[i] = (float*)malloc(columnas*sizeof(float));
 		//Si falla el malloc, libero todo lo reservado anteriormente
@@ -77,7 +76,7 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 		j = 0;
 		bool exito = true;
 		while (i<fila && exito) {
-			if (scanf("%f ",&matriz[i][j])) {
+			if (scanf("%f\n",&matriz[i][j])) {
 				cantidadElementos++;
 				if (j==columna-1) {
 					j=0;
