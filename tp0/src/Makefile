@@ -3,11 +3,11 @@ CFLAGS = -Wall
 PROG = tp0
 MIPSFLAGS = -O0 -S -mrnames
 
-mips:
+.mips:
 	$(CC) $(CFLAGS) $(MIPSFLAGS) main.c
 
 all:
 	$(CC) $(CFLAGS) main.c -o $(PROG)
 
-clean:
+.clean:
 	rm *.o *.s $(PROG)
