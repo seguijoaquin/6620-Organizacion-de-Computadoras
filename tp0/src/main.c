@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <getopt.h>
+#include <string.h>
 
 //Funcion que imprime el manual del TP0
 void printManual(){
@@ -68,6 +69,55 @@ float** alocarMatriz( int filas, int columnas) {
 	return matriz;
 }
 
+size_t strLength(char* s){
+    size_t i;
+    for(i = 0; s[i] != 0; i++);
+    return i;
+}
+
+char* getLine() {
+	char buff[100];
+	if (!fgets(buff,100, stdin)) {
+			return NULL;
+	}
+	size_t l = strLength(buff);
+	if (buff[l-1] == '\n')	{
+		if (l > 1)	{
+			buff[l-1] = 0;
+			}
+		char* concat;
+		concat = (char*)malloc(l*sizeof(char));
+		int i;
+		for (i=0;i<l;i++)
+			concat[i] = buff[i];
+		return concat;
+	} else {
+		//EN ESTE CASO, EL BUFFER ES MENOR A LA CANTIDAD DE CARACTERES DE LA LINEA
+		//DEBO ARMAR UN BUFFER MAS GRANDE Y SEGUIR LEYENDO HASTA ENCONTRAR
+		//EL FIN DE LINEA
+		/*
+		char buff2[100];
+		char* concat;
+		concat = NULL;
+		while (fgets(buff2,100,stdin)) {
+			free(concat);
+			size_t l2 = strLength(buff2);
+			concat = (char*)malloc((l+l2+1)*sizeof(char));
+			int i;
+			for (i = 0; i < l; i++)
+					concat[i] = buff[i];
+			for (i = 0; i < l2; i++){
+					int j = i + l;
+					concat[j] = buff2[i];
+					}
+			concat[l+l2] = 0;
+		}
+		return concat;
+		*/
+	}
+	return NULL;
+}
+
 int llenarMatriz(float** matriz, int fila, int columna) {
 		int i;
 		int j;
@@ -76,10 +126,10 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 		j = 0;
 		bool exito = true;
 		float valor;
-		int escan;
-		while (exito && i<fila && j<columna) {
-			escan = scanf("%f ",&valor );
-			if (escan != EOF) {
+		int flag;
+		while (exito && i<fila) {
+			flag = scanf("%f",&valor);
+			if (flag != EOF) {
 				matriz[i][j] = valor;
 				cantidadElementos++;
 				if (j==columna-1) {
@@ -92,7 +142,7 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 				exito = false;
 			}
 		}
-		if (cantidadElementos < ((fila)*(columna))) {
+		if (cantidadElementos != ((fila)*(columna))) {
 			return EXIT_FAILURE;
 		}
 	return EXIT_SUCCESS;
