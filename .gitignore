@@ -25,3 +25,5 @@ $RECYCLE.BIN/
 tp0.out
 informe.*
 !informe.pdf
+informe_impreso.*
+!informe_impreso.pdf

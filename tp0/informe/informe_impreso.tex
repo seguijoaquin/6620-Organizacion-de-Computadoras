@@ -158,10 +158,57 @@ Asimismo se proviciona un script que realiza pruebas con un set de datos preexis
 		cuya salida se obtuvo correctamente
 	
 		\texttt{3x3 0 3 1 0 6 2 0 9 3}
-		
+
 		\texttt{1x3 16 3 4}
 
 	\subsection{Casos de error}
+		Como casos de error del programa probamos matrices incompatibles para su multiplicacion y matrices mal definidas.
+
+		Uno de estos casos es el de tener dos matrices cuyas dimensiones hacen incompatibles la multiplicación entre sí. Este es el caso del set \textit{test3}.
+
+		\lstinputlisting[basicstyle=\footnotesize]{../src/test_files/test3.txt}
+		\begin{center}
+		$\begin{pmatrix}
+		1 & 2
+		\end{pmatrix}
+		*
+		\begin{pmatrix}
+		1 & 0 & 4
+		\end{pmatrix}
+		$\end{center}
+
+		Al ejecutar dicha prueba, el programa termina con el siguiente mensaje:
+
+		\texttt{Dimensiones no compatibles para multiplicar}\\
+
+		Otra prueba es tener una cantidad impar de matrices, por lo cuál una no podrá ser multiplicada. Por ejemplo \textit{test4}.
+
+		\lstinputlisting[basicstyle=\footnotesize]{../src/test_files/test4.txt}
+		
+		Como resultado arroja
+
+		\texttt{3x3 0 3 1 0 6 2 0 9 3}
+
+		\texttt{Fallo al leer dimensiones}\\
+
+		Otros casos de prueba, consisten en definir dimensiones de matrices inconsistentes con la cantidad de elementos leidos. Al ver \textit{test5}
+
+		\lstinputlisting[basicstyle=\footnotesize]{../src/test_files/test5.txt}
+
+		\begin{center}
+		$\begin{pmatrix}
+		1 \\ 2 \\ X
+		\end{pmatrix}
+		*
+		\begin{pmatrix}
+		0 & 3 & 1
+		\end{pmatrix}
+		$\end{center}
+
+		si bien las dimensiones declaradas son compatibles para su multiplicación, los elementos provistos son inconsistentes. Dicha prueba arroja:
+
+		\texttt{Cantidad elementos distinta a dimensiones de matriz}
+
 
 \newpage
 \section{Codigo fuente del programa}
@@ -181,18 +228,24 @@ Asimismo se proviciona un script que realiza pruebas con un set de datos preexis
 			commentstyle=\color{deepblue},
 			]{../src/main.c}
 
+\newpage
 \subsection{Codigo MIPS32 generado por el compilador}
 
-\texttt{
-... (Codigo de MIPS32)
+\lstinputlisting[
+			basicstyle=\footnotesize,
+			numbers=left,
+			stepnumber=1,
+			numbersep=4pt,
+			tabsize=2,
+			otherkeywords={self}, 
+			keywordstyle=\color{deepred},
+			stringstyle=\color{deepgreen},
+			commentstyle=\color{deepblue},
+			lastline=72,
+			]{../src/main.s}
 }
+\newpage\thispagestyle{empty}
+\includepdf[pages=1,pagecommand=\subsection{Enunciado}]{tp0-2015-2q.pdf}
+\includepdf[pages=2-,]{tp0-2015-2q.pdf}
 
-\section{Enunciado}
-
-Acá iría el enunciado, no se si se anexa aparte o lo agregamos acá
-
-
-\section{Conclusiones}
-
-...  Conclusiones  ...
 \end{document}
