@@ -1,0 +1,79 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{graphicx}
+\usepackage[ansinew]{inputenc}
+\usepackage[spanish]{babel}
+
+\title{		\textbf{Trabajo Práctico Nro. 0}}
+
+\author{	Joaquin Segui, \textit{Padrón Nro. 91.451}                     \\
+            \texttt{ segui.joaquin@gmail.com }                                          \\[2.5ex]
+            Pernin Alejandro, \textit{Padrón Nro. 92.216}                     \\
+            \texttt{ ale.pernin@gmail.com }                                              \\[2.5ex]
+            Menniti Sebastián Ezequiel, \textit{Padrón Nro. 93.445}                     \\
+            \texttt{ mennitise@gmail.com }                                              \\[2.5ex]
+            \normalsize{2do. Cuatrimestre de 2015}                                      \\
+            \normalsize{66.20 Organización de Computadoras  $-$ Práctica Martes}  \\
+            \normalsize{Facultad de Ingeniería, Universidad de Buenos Aires}            \\
+       }
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}   % quita el número en la primer página
+
+
+\section{Introducción}
+
+Se implemento un programa, en lenguaje C, que se encarga de multiplicar matrices de números reales, representados en punto flotante de doble precisión.
+
+
+\section{Diseño e Implementación}
+
+Las matrices a multiplicar se ingresan por entrada estándar (\texttt{stdin}), donde cada linea representada una matríz completa en formato de texto, describiendola mediante el siguiente formato:
+
+\begin{center}
+
+\textit{  NxM a_{1,1}  a_{1,2}  ...  a_{1,M}  a_{2,1}  a_{2,2}  ...  a_{2,M}  ...  a_{N,1}  a_{N,2}  ...  a_{N,M}  }
+
+\end{center}
+
+Esta linea representa a una matríz \textit{A}, donde \textit{N} es la cantidad de filas y \textit{M} la cantidad de columnas de la matríz \textit{A}. Los elementos de la matríz \textit{A} son los \texit{ a_{x,y} } , donde \textit{x} e \textit{y} son los indices de fila y columna respectivamente. El fin de linea se delimita con el caracter \textit{newline}.
+
+Por cada par de matrices que se presentan en la entrada, el programa en primer lugar, se encarga de cargarlas, luego verifica que las matrices cumplan con la condición para que la multiplicación sea posible (Se verifica que la cantidad de columnas de la primer matríz sea igual a la cantidad de filas de la segunda matríz), y en el caso que la cumplan, se procede a multiplicarlas. El resultado obtenido lo presenta por salida estándar (\texttt{stdout}), en el mismo formato mencionado anteriormente. Este proceso se repite hasta que llegue al final del archivo de entrada (\texttt{EOF}). Si se encontrara con un error, el programa lo informa por \texttt{stderr} y se detiene su ejecución.
+
+
+
+\section{Comandos para compilar el programa}
+
+...
+
+\section{Pruebas}
+
+...
+
+\section{Codigo fuente del programa}
+
+\subsection{En lenguaje C}
+
+\texttt{
+... (Codigo en C)
+}
+
+\subsection{Codigo MIPS32 generado por el compilador}
+
+\texttt{
+... (Codigo de MIPS32)
+}
+
+\section{Enunciado}
+
+Acá iría el enunciado, no se si se anexa aparte o lo agregamos acá
+
+
+\section{Conclusiones}
+
+...  Conclusiones  ...
+
+\end{document}
