@@ -121,6 +121,7 @@ char* getLine() {
 int llenarMatriz(float** matriz, int fila, int columna) {
 		int i;
 		int j;
+		char c;
 		int cantidadElementos = 0;
 		i = 0;
 		j = 0;
@@ -128,8 +129,9 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 		float valor;
 		int flag;
 		while (exito && i<fila) {
-			flag = scanf("%f",&valor);
-			if (flag != EOF) {
+			flag = scanf("%f%c",&valor,&c);
+			if (flag != EOF && flag == 2) {
+				//printf("Leo: %f y %c\n",valor,c);
 				matriz[i][j] = valor;
 				cantidadElementos++;
 				if (j==columna-1) {
@@ -142,7 +144,7 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 				exito = false;
 			}
 		}
-		if (cantidadElementos != ((fila)*(columna))) {
+		if (cantidadElementos != ((fila)*(columna)) || (c!='\n')) {
 			return EXIT_FAILURE;
 		}
 	return EXIT_SUCCESS;
@@ -194,7 +196,7 @@ int main(int argc, char *argv[]) {
 		llenar = llenarMatriz(matriz1,fila1,columna1);
 		if (llenar) {
 			liberarMatriz(matriz1,fila1);
-			fprintf(stderr, "Cantidad elementos menor a dimensiones de matriz\n");
+			fprintf(stderr, "Cantidad elementos distinta a dimensiones de matriz\n");
 			return EXIT_FAILURE;
 		}
 		//Repito para segunda matriz
@@ -217,7 +219,7 @@ int main(int argc, char *argv[]) {
 		if (llenar) {
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
-			fprintf(stderr, "Cantidad elementos menor a dimensiones de matriz\n");
+			fprintf(stderr, "Cantidad elementos distinta a dimensiones de matriz\n");
 			return EXIT_FAILURE;
 		}
 		if(columna1 == fila2) {
