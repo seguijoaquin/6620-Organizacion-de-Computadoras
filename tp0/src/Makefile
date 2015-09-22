@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-PROG = tp0
+PROG = tp0.out
 MIPSFLAGS = -O0 -S -mrnames
 
 .mips:
