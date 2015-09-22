@@ -75,6 +75,49 @@ size_t strLength(char* s){
     return i;
 }
 
+char* getLine() {
+	char buff[100];
+	if (!fgets(buff,100, stdin)) {
+			return NULL;
+	}
+	size_t l = strLength(buff);
+	if (buff[l-1] == '\n')	{
+		if (l > 1)	{
+			buff[l-1] = 0;
+			}
+		char* concat;
+		concat = (char*)malloc(l*sizeof(char));
+		int i;
+		for (i=0;i<l;i++)
+			concat[i] = buff[i];
+		return concat;
+	} else {
+		//EN ESTE CASO, EL BUFFER ES MENOR A LA CANTIDAD DE CARACTERES DE LA LINEA
+		//DEBO ARMAR UN BUFFER MAS GRANDE Y SEGUIR LEYENDO HASTA ENCONTRAR
+		//EL FIN DE LINEA
+		/*
+		char buff2[100];
+		char* concat;
+		concat = NULL;
+		while (fgets(buff2,100,stdin)) {
+			free(concat);
+			size_t l2 = strLength(buff2);
+			concat = (char*)malloc((l+l2+1)*sizeof(char));
+			int i;
+			for (i = 0; i < l; i++)
+					concat[i] = buff[i];
+			for (i = 0; i < l2; i++){
+					int j = i + l;
+					concat[j] = buff2[i];
+					}
+			concat[l+l2] = 0;
+		}
+		return concat;
+		*/
+	}
+	return NULL;
+}
+
 int llenarMatriz(double** matriz, int fila, int columna) {
 		int i;
 		int j;
