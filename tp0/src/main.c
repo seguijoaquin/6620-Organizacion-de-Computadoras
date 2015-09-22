@@ -47,15 +47,15 @@ void parsearOpciones(int argc, char* argv[]) {
   } while (next_option != -1);
 }
 
-float** alocarMatriz( int filas, int columnas) {
-	float** matriz;
-	matriz = (float**)malloc(filas*sizeof(float*));
+double** alocarMatriz( int filas, int columnas) {
+	double** matriz;
+	matriz = (double**)malloc(filas*sizeof(double*));
 	if (!matriz) {
 		return NULL;
 	}
 	int i; //Recorre filas
 	for(i=0;i<filas;i++){
-		matriz[i] = (float*)malloc(columnas*sizeof(float));
+		matriz[i] = (double*)malloc(columnas*sizeof(double));
 		//Si falla el malloc, libero todo lo reservado anteriormente
 		if(!matriz[i]) {
 			int j;
@@ -118,7 +118,7 @@ char* getLine() {
 	return NULL;
 }
 
-int llenarMatriz(float** matriz, int fila, int columna) {
+int llenarMatriz(double** matriz, int fila, int columna) {
 		int i;
 		int j;
 		char c;
@@ -126,12 +126,12 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 		i = 0;
 		j = 0;
 		bool exito = true;
-		float valor;
+		double valor;
 		int flag;
 		while (exito && i<fila) {
-			flag = scanf("%f%c",&valor,&c);
+			flag = scanf("%lf%c",&valor,&c);
 			if (flag != EOF && flag == 2) {
-				//printf("Leo: %f y %c\n",valor,c);
+				//printf("Leo: %lf y %c\n",valor,c);
 				matriz[i][j] = valor;
 				cantidadElementos++;
 				if (j==columna-1) {
@@ -150,18 +150,18 @@ int llenarMatriz(float** matriz, int fila, int columna) {
 	return EXIT_SUCCESS;
 }
 
-void liberarMatriz(float** matriz, int fila) {
+void liberarMatriz(double** matriz, int fila) {
 	int i;
 	for(i=0;i<fila;++i) {
 		free(matriz[i]);
 	}
 	free(matriz);
 }
-void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int columna2) {
+void multiplicar(double** matriz1, int fila1, int columna1, double** matriz2, int columna2) {
 	int i;
 	int j;
 	int k;
-	float accum;
+	double accum;
 	printf("%ix%i ",fila1,columna2);
 	for(i=0;i<fila1;i++) {
 		for(j=0;j<columna2;j++) {
@@ -177,7 +177,7 @@ void multiplicar(float** matriz1, int fila1, int columna1, float** matriz2, int 
 int main(int argc, char *argv[]) {
   parsearOpciones(argc,argv);
 	//Construyo la primera matriz
-	float** matriz1;
+	double** matriz1;
 	int fila1;
 	int columna1;
 	int cant;
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
 			return EXIT_FAILURE;
 		}
 		//Repito para segunda matriz
-		float** matriz2;
+		double** matriz2;
 		int fila2;
 		int columna2;
 		cant = scanf("%i%*c%i ",&fila2,&columna2);
