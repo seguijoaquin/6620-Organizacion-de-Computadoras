@@ -1,7 +1,6 @@
 ################
 # Local Files
 ################
-*.*~
 code/*.*~
 code/*~
 
@@ -21,4 +20,6 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
-tp0
+
+#Binario Creado
+tp0.out
