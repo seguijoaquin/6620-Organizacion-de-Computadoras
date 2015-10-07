@@ -27,3 +27,4 @@ informe.*
 !informe.pdf
 informe_impreso.*
 !informe_impreso.pdf
+!*.tex
