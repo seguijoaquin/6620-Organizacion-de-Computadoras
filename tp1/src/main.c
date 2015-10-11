@@ -99,6 +99,17 @@ int llenarMatriz(double* matriz, int fila, int columna) {
 	return EXIT_SUCCESS;
 }
 
+void mostrarMatriz(double* matriz, int fila, int col)
+{
+	//printf("La matriz impresa da:\n");
+	int i;
+	for(i=0; i<fila*col; i++)
+	{
+		printf("%g ",matriz[i]);
+	}
+	printf("\n");
+}
+
 void liberarMatriz(double* matriz, int fila) {
 	/*
 	int i;
@@ -108,7 +119,7 @@ void liberarMatriz(double* matriz, int fila) {
 	*/
 	free(matriz);
 }
-void multiplicar(double* matriz1, int fila1, int columna1, double* matriz2, int columna2) {
+void multiplicar(double* matriz1, int fila1, int columna1, double* matriz2, int columna2, double* matrizRes) {
 	int i;
 	int j;
 	int k;
@@ -122,10 +133,12 @@ void multiplicar(double* matriz1, int fila1, int columna1, double* matriz2, int 
 				int pos2 = (k*columna2)+j;
 				accum = accum + (matriz1[pos1] * matriz2[pos2]);
 			}
-			printf("%g ",accum);
+			int pos3 = (i*columna2)+j;
+			matrizRes[pos3] = accum;
+			//printf("%g (en %d)",accum,pos3);
 		}
 	}
-	printf("\n");
+	//printf("\n");
 }
 int main(int argc, char *argv[]) {
   parsearOpciones(argc,argv);
@@ -176,10 +189,19 @@ int main(int argc, char *argv[]) {
 			return EXIT_FAILURE;
 		}
 		if(columna1 == fila2) {
+			double* matrizRes = alocarMatriz(fila1,columna2);
+			if (!matrizRes)
+			{
+				liberarMatriz(matriz1,fila1);
+				liberarMatriz(matriz2,fila2);
+				liberarMatriz(matrizRes,fila1);
+			}
 			//Multiplicar
-			multiplicar(matriz1,fila1,columna1,matriz2,columna2);
+			multiplicar(matriz1,fila1,columna1,matriz2,columna2,matrizRes);
+			mostrarMatriz(matrizRes,fila1,columna2);
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
+			liberarMatriz(matrizRes,fila1);
 		} else {
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
