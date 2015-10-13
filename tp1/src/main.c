@@ -4,6 +4,8 @@
 #include <getopt.h>
 #include <string.h>
 
+extern myMultiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2);
+
 //Funcion que imprime el manual del TP0
 void printManual(){
 	printf("Usage:\n tp0 -h\n");
@@ -34,7 +36,7 @@ void parsearOpciones(int argc, char* argv[]) {
   	    exit(EXIT_SUCCESS);
   	    break;
       case 'V':   // -V, --version
-  	    printf(" Version 1.0 del TP0\n");
+  	    printf(" Version 2.0 del TP0\n");
   	    exit(EXIT_SUCCESS);
   	    break;
       case -1:   // Se terminaron las opciones
@@ -74,7 +76,7 @@ int llenarMatriz(double* matriz, int fila, int columna) {
 		i = 0;
 		j = 0;
 		bool exito = true;
-		double valor;
+		double valor=0;
 		int flag,pos;
 		while (exito && i<fila) {
 			flag = scanf("%lf%c",&valor,&c);
@@ -197,8 +199,9 @@ int main(int argc, char *argv[]) {
 				liberarMatriz(matrizRes,fila1);
 			}
 			//Multiplicar
-			multiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
-			mostrarMatriz(matrizRes,fila1,columna2);
+			//myMultiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
+			//mostrarMatriz(matrizRes,fila1,columna2);
+			printf("Prueba en pos 0: %G\n",matrizRes[0]);
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
 			liberarMatriz(matrizRes,fila1);

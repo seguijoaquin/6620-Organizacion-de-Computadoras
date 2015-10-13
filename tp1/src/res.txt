@@ -1,0 +1,31 @@
+Compilo
+gcc -Wall main.c -o tp0.out
+
+
+ Las pruebas se pueden realizar manualmente mediante ./tp0.out < test_files/test#.txt
+
+
+Caso exitoso test1
+1x3 11 2 10 
+
+
+Caso exitoso test2
+3x3 0 3 1 0 6 2 0 9 3 
+1x3 16 3 4 
+
+
+Caso matrices incompatibles test3
+Dimensiones no compatibles para multiplicar
+
+
+Caso cantidad impar de matrices test4
+3x3 0 3 1 0 6 2 0 9 3 
+Fallo al leer dimensiones
+
+
+Caso elementos < dimension definida test5
+Cantidad elementos distinta a dimensiones de matriz
+
+
+Caso elementos > dimension definida test6
+Cantidad elementos distinta a dimensiones de matriz

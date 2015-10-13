@@ -1,10 +1,10 @@
 CC = gcc
 CFLAGS = -Wall
 PROG = tp0.out
-MIPSFLAGS = -O0 -S -mrnames
+MIPSFLAGS = myMultiplicar.s
 
 .mips:
-	$(CC) $(CFLAGS) $(MIPSFLAGS) main.c
+	$(CC) $(CFLAGS) $(MIPSFLAGS) main.c -o $(PROG)
 
 all:
 	$(CC) $(CFLAGS) main.c -o $(PROG)
