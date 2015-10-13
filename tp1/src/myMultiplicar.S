@@ -19,6 +19,10 @@ myMultiplicar:
     move $fp, sp        #uso fp en vez de sp
 
 #    j  _exit
+	#bloque para codigo PIC
+	.set noreorder
+	.cpload t9
+	.set reorder
 
     #Cargo los args en el stack
     sw a0,32($fp) 	#double* m1
@@ -26,9 +30,9 @@ myMultiplicar:
     sw a2,40($fp)	#double* mres
     sw a3,44($fp)	#int filas 1
     lw t0,48($fp)	#int columnas 1
-    sw tp,48($fp)	#Redundancia
-    lw t0,52($fp)	#int columnas 2
-    sw t0,52($fp)	#redundancia
+    sw t0,48($fp)	#Redundancia
+    lw t1,52($fp)	#int columnas 2
+    sw t1,52($fp)	#redundancia
 
 #	TESTING
 #    la t0,0(a0)     #cargo en t0 la dir de a0
@@ -68,7 +72,7 @@ _loop_j:
 	sw t2,8($fp)	#k -> 8($fp)
 
 	sw ra,4($fp)	#guardo el ra de j
-	subu $f0,$f0,$f0	#acum = 0
+	sub.d $f0,$f0,$f0	#acum = 0
 	s.d $f0,($fp) #PREGUNTAAR accum-> fp
 
 	jal _loop_k
@@ -116,7 +120,7 @@ _loop_k:
 	l.d $f4,(a1)	#aux 2 = m2[pos2]
 
 	mul.d $f2,$f2,$f4 #m1[pos1] * m2[pos2]
-	addu $f0,$f0,$f2 	#acum = acum + (m1[pos1] * m2[pos2])
+	add.d $f0,$f0,$f2 	#acum = acum + (m1[pos1] * m2[pos2])
 	s.d $f0,($fp)	#Guardo el accum
 
 	addu t2,t2,1
