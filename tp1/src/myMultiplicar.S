@@ -46,12 +46,19 @@ myMultiplicar:
 #    l.d $f0,(t0)
 #    s.d $f0,8(t2)
 #    lw v0,52($fp)
-#    j _exit
-	
+#   j _exit
+
 	move	t0,zero #i = 0 
 	sw	t0,16($fp)	#i -> 16($fp)
+#TESTING
+	lw t3,44($fp)	#Cargo Filas 1
+	lw t4,48($fp)	#Cargo Columnas 1
+	lw t5,52($fp) 	#Cargo Columnas 2
+
+	move v0,t5 		#Resultado = 3
 
 _loop_i:
+	#En i no falla (fallaria en _loop_j)
 	lw t0,16($fp)	#Redundante, t0=i
 
 	move t1, zero	#j = 0
@@ -129,13 +136,15 @@ _loop_k:
 	blt t2, t4, _loop_k #Seguir si k < columna1
 	j ra
 
-.end myMultiplicar
-
 _exit:
     #Desarmo el Stack Frame
+
     move sp,$fp
     lw ra,28(sp)
     lw $fp,24(sp)
-    lw gp,20(sp)
+    lw gp,20(sp) 
+    lw s0,(sp)
     addu sp,sp,32
     j ra
+
+.end myMultiplicar
