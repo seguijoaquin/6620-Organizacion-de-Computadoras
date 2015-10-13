@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall
-PROG = tp0.out
-MIPSFLAGS = myMultiplicar.s
+PROG = tp1.out
+MIPSFLAGS = myMultiplicar.S
 
 .mips:
 	$(CC) $(CFLAGS) $(MIPSFLAGS) main.c -o $(PROG)

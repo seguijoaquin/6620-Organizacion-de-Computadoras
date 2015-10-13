@@ -4,7 +4,7 @@
 #include <getopt.h>
 #include <string.h>
 
-extern myMultiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2);
+extern int myMultiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2);
 
 //Funcion que imprime el manual del TP0
 void printManual(){
@@ -199,9 +199,19 @@ int main(int argc, char *argv[]) {
 				liberarMatriz(matrizRes,fila1);
 			}
 			//Multiplicar
-			//myMultiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
+			int res = myMultiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
+			printf("El res fue %d\n",res);
 			//mostrarMatriz(matrizRes,fila1,columna2);
-			printf("Prueba en pos 0: %G\n",matrizRes[0]);
+			printf("M1: ");
+			mostrarMatriz(matriz1,fila1,columna1);
+
+			printf("M2: ");
+			mostrarMatriz(matriz2,fila2,columna2);
+
+			printf("Mr: ");
+			mostrarMatriz(matrizRes,fila1,columna2);
+
+			//printf("Prueba en pos 0: %G\n",matrizRes[0]);
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
 			liberarMatriz(matrizRes,fila1);
