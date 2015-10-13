@@ -119,7 +119,7 @@ void liberarMatriz(double* matriz, int fila) {
 	*/
 	free(matriz);
 }
-void multiplicar(double* matriz1, int fila1, int columna1, double* matriz2, int columna2, double* matrizRes) {
+void multiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2) {
 	int i;
 	int j;
 	int k;
@@ -197,7 +197,7 @@ int main(int argc, char *argv[]) {
 				liberarMatriz(matrizRes,fila1);
 			}
 			//Multiplicar
-			multiplicar(matriz1,fila1,columna1,matriz2,columna2,matrizRes);
+			multiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
 			mostrarMatriz(matrizRes,fila1,columna2);
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
