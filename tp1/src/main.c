@@ -4,13 +4,13 @@
 #include <getopt.h>
 #include <string.h>
 
-extern int myMultiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2);
+extern void myMultiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2);
 
 //Funcion que imprime el manual del TP0
 void printManual(){
-	printf("Usage:\n tp0 -h\n");
-	printf(" tp0 -V\n");
-	printf("tp0 < in_file > out_file\n");
+	printf("Usage:\n tp1 -h\n");
+	printf(" tp1 -V\n");
+	printf("tp1 < in_file > out_file\n");
 	printf("Options:\n");
 	printf(" -V, --version 	Print version and quit.\n");
 	printf(" -h, --help  	Print this information and quit.\n");
@@ -103,7 +103,7 @@ int llenarMatriz(double* matriz, int fila, int columna) {
 
 void mostrarMatriz(double* matriz, int fila, int col)
 {
-	//printf("La matriz impresa da:\n");
+	printf("%dx%d ",fila,col);
 	int i;
 	for(i=0; i<fila*col; i++)
 	{
@@ -113,14 +113,10 @@ void mostrarMatriz(double* matriz, int fila, int col)
 }
 
 void liberarMatriz(double* matriz, int fila) {
-	/*
-	int i;
-	for(i=0;i<fila;++i) {
-		free(matriz[i]);
-	}
-	*/
+
 	free(matriz);
 }
+
 void multiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2) {
 	int i;
 	int j;
@@ -142,6 +138,7 @@ void multiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, 
 	}
 	//printf("\n");
 }
+
 int main(int argc, char *argv[]) {
   parsearOpciones(argc,argv);
 	//Construyo la primera matriz
@@ -196,22 +193,14 @@ int main(int argc, char *argv[]) {
 			{
 				liberarMatriz(matriz1,fila1);
 				liberarMatriz(matriz2,fila2);
-				liberarMatriz(matrizRes,fila1);
+				//liberarMatriz(matrizRes,fila1);
+				fprintf(stderr, "Fallo en malloc\n");
+				return EXIT_FAILURE;
 			}
 			//Multiplicar
-			int res = myMultiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
-			printf("El res fue %d\n",res);
-			//mostrarMatriz(matrizRes,fila1,columna2);
-			printf("M1: ");
-			mostrarMatriz(matriz1,fila1,columna1);
-
-			printf("M2: ");
-			mostrarMatriz(matriz2,fila2,columna2);
-
-			printf("Mr: ");
+			myMultiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
 			mostrarMatriz(matrizRes,fila1,columna2);
 
-			//printf("Prueba en pos 0: %G\n",matrizRes[0]);
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
 			liberarMatriz(matrizRes,fila1);

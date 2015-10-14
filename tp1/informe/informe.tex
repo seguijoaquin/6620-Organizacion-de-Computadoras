@@ -41,7 +41,7 @@
 %\title{Multímetros en Corriente Continua}
 \title{Universidad de Buenos Aires - FIUBA \\
 		66.20 Organización de Computadoras \\
-		Trabajo Práctico 0: Infraestructura Básica\\}
+		Trabajo Práctico 1: Assembly Mips\\}
 \author{	Joaquin Segui, \textit{Padrón Nro. 91.451}                     \\
             \texttt{ segui.joaquin@gmail.com }                                          \\[2.5ex]
             Pernin Alejandro, \textit{Padrón Nro. 92.216}                     \\
@@ -60,7 +60,7 @@
 %\newpage\null\thispagestyle{empty}\newpage
 \maketitle\thispagestyle{empty}
 
-\newpage\null\thispagestyle{empty}\newpage
+\newpage\null\thispagestyle{empty}%\newpage
 
 %\newpage
 %\tableofcontents
@@ -69,28 +69,52 @@
 
 \section{Introducción}
 
-Se implemento un programa, en lenguaje C, que se encarga de multiplicar matrices de números reales, representados en punto flotante de doble precisión.
+Se implemento un programa, en lenguaje C, que se encarga de multiplicar matrices de números reales, representados en punto flotante de doble precisión. A diferencia del trabajo anterior, la función encargada de la multiplicación de las matrices se encuentra escrita en el lenguaje Assembly Mips.
 
 
 \section{Diseño e Implementación}
 
-Las matrices a multiplicar se ingresan por entrada estándar (\texttt{stdin}), donde cada linea representada una matríz completa en formato de texto, describiendola mediante el siguiente formato:
+Dada las limitaciones del assembly Mips, fue necesario realizar algunos cambios respecto de la entrega anterior
 
-\begin{center}
+\begin{itemize}
+	\item Representar las matrices como un unico arreglo de doubles.
+	\item Diseñar el manejo de los argumentos mediante el stack.
+\end{itemize}
 
-$NxM \: a_{1,1} \: a_{1,2} \: ... \: a_{1,M} \: a_{2,1} \: a_{2,2} \: ... \: a_{2,M} \: ... \: a_{N,1} \: a_{N,2} \: ... \: a_{N,M}$
+Para manejar diversas variables dentro del programa, se utilizo un Stack Frame de 32 bytes.
 
-\end{center}
-Esta linea representa a una matríz \textit{A}, donde \textit{N} es la cantidad de filas y \textit{M} la cantidad de columnas de la matríz \textit{A}. Los elementos de la matríz \textit{A} son los \textit{$a_{x,y}$} , donde \textit{x} e \textit{y} son los indices de fila y columna respectivamente. El fin de linea se delimita con el caracter \textit{newline}.
+	\begin{center}
+			{\footnotesize \begin{tabular}{ |l|c| }
 
-Por cada par de matrices que se presentan en la entrada, el programa en primer lugar, se encarga de cargarlas, luego verifica que las matrices cumplan con la condición para que la multiplicación sea posible (Se verifica que la cantidad de columnas de la primer matríz sea igual a la cantidad de filas de la segunda matríz), y en el caso que la cumplan, se procede a multiplicarlas. El resultado obtenido lo presenta por salida estándar (\texttt{stdout}), en el mismo formato mencionado anteriormente. Este proceso se repite hasta que llegue al final del archivo de entrada (\texttt{EOF}). Si se encontrara con un error, el programa lo informa por \texttt{stderr} y se detiene su ejecución.
+			\hline
+				52 & columnas 2 \\ \hline
+				48 & columnas 1 \\ \hline	
+				44 & a3 (filas 1) \\ \hline
+				40 & a2 (double* src1) \\ \hline
+				36 & a1 (double* src2) \\ \hline
+				32 & a0 (double* dest) \\ \hline
+				28 & ra \\ \hline
+				24 & fp \\ \hline
+				20 & gp \\ \hline
+				16 & i \\ \hline
+				12 & j \\ \hline
+				8 & k \\ \hline
+				4 & ra (not used) \\ \hline
+				0 & accum \\ \hline
+				
+			\end{tabular}}\captionof{table}{Stack Frame}\label{tab:regtension}
+	\end{center}
 
-
+Alli se alojan los valores empleados para los controles de los ciclos y el acumulador auxiliar para la multiplicación. Si bien la posición 4 no se utiliza, el frame debe ser multiplo de 8 bytes y por ello se mantienen los 32 bytes.
 
 \section{Comandos para compilar el programa}
-Para facilitar la compilacion se utiliza un \textit{Makefile}, para invocar la compilación del programa ejecutar desde una consola, dentro del mismo directorio que el código fuente: \texttt{make}.
+	\subsection{Copiar a VM}
+		Dado que el programa se corre dentro de la maquina virtual gxemul, se facilita un script en bash que copia el contenido de la carpeta en el guest (considerando la configuración default vista en clase). Para ello invocar desde el host \texttt{copiar\_tp.sh} el mismo se copiará en \textit{/root/tp1}.
 
-Asimismo se proviciona un script que realiza pruebas con un set de datos preexistente, para invocarlo: \texttt{./pruebas.sh}.
+	\subsection{Compilacion y Ejecucion}
+		Para facilitar la compilacion se utiliza un \textit{Makefile}, para invocar la compilación del programa ejecutar desde una consola, dentro del mismo directorio que el código fuente: \texttt{make}.
+
+		Asimismo se proviciona un script que realiza pruebas con un set de datos preexistente, para invocarlo: \texttt{bash pruebas\_mips.sh}.
 
 \section{Pruebas}
 	En esta sección se detallarán las pruebas realizadas. Los archivos utilizados se encuentran el el directorio \textit{test\_files}.
@@ -157,9 +181,11 @@ Asimismo se proviciona un script que realiza pruebas con un set de datos preexis
 	
 		cuya salida se obtuvo correctamente
 	
-		\texttt{3x3 0 3 1 0 6 2 0 9 3}
+		\texttt{3x3 2.22507e-308 3 1 3.33761e-308 6 2 4.45015e-308 9 3 }
 
 		\texttt{1x3 16 3 4}
+
+		\textbf{Nota:} Queda a determinar el causal de que el 0 (cero) no se encuentre expresado exactamente.
 
 	\subsection{Casos de error}
 		Como casos de error del programa probamos matrices incompatibles para su multiplicacion y matrices mal definidas.
@@ -187,7 +213,7 @@ Asimismo se proviciona un script que realiza pruebas con un set de datos preexis
 		
 		Como resultado arroja
 
-		\texttt{3x3 0 3 1 0 6 2 0 9 3}
+		\texttt{3x3 2.22507e-308 3 1 3.33761e-308 6 2 4.45015e-308 9 3 }
 
 		\texttt{Fallo al leer dimensiones}\\
 
@@ -229,7 +255,7 @@ Asimismo se proviciona un script que realiza pruebas con un set de datos preexis
 			]{../src/main.c}
 
 \newpage
-\subsection{Codigo MIPS32 generado por el compilador}
+\subsection{Funcion en MIPS32}
 
 \lstinputlisting[
 			language=Assembler,
@@ -242,10 +268,10 @@ Asimismo se proviciona un script que realiza pruebas con un set de datos preexis
 			keywordstyle=\color{deepred},
 			stringstyle=\color{deepgreen},
 			commentstyle=\color{deepblue},
-			]{../src/main.s}
-}
+			]{../src/myMultiplicar.S}
+
 \newpage\thispagestyle{empty}
-\includepdf[pages=1,pagecommand=\subsection{Enunciado}]{tp0-2015-2q.pdf}
-\includepdf[pages=2-,]{tp0-2015-2q.pdf}
+\includepdf[pages=1,pagecommand=\section{Enunciado}]{tp1-2015-2q.pdf}
+\includepdf[pages=2-,]{tp1-2015-2q.pdf}
 
 \end{document}

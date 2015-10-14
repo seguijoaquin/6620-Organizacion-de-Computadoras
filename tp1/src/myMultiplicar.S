@@ -18,7 +18,6 @@ myMultiplicar:
     sw gp,20(sp)
     move $fp, sp        #uso fp en vez de sp
 
-#    j  _exit
 	#bloque para codigo PIC
 	.set noreorder
 	.cpload t9
@@ -34,37 +33,20 @@ myMultiplicar:
     lw t1,52($fp)	#int columnas 2
     sw t1,52($fp)	#redundancia
 
-#	TESTING
-#    la t0,0(a0)     #cargo en t0 la dir de a0
-#    la t1,0(a1)     #cargo en t1 la dir de a1
-#    la t2,0(a2)     #cargo en t2 la dir de a2
-#    move t3, a3     #cargo en t3 f1
-
-#   lw t4, 48($fp)  #cargo en t4 c1
-#    lw t5, 52($fp)  #cargo en t5 c2
-
-#    l.d $f0,(t0)
-#    s.d $f0,8(t2)
-#    lw v0,52($fp)
-#   j _exit
-
 	move	t0,zero #i = 0 
 	sw	t0,16($fp)	#i -> 16($fp)
-#TESTING
-	lw t3,44($fp)	#Cargo Filas 1
-	lw t4,48($fp)	#Cargo Columnas 1
-	lw t5,52($fp) 	#Cargo Columnas 2
 
 	move v0,t5 		#Resultado = 3
 
 _loop_i:
-	#En i no falla (fallaria en _loop_j)
 	lw t0,16($fp)	#Redundante, t0=i
 
 	move t1, zero	#j = 0
 	sw t1,12($fp)	#j -> 12($fp)
-	jal _loop_j
-	
+	b _loop_j
+
+_end_loop_i:		
+	lw t0,16($fp)
 	addu t0,t0,1
 	sw t0,16($fp) #i++
 
@@ -78,29 +60,31 @@ _loop_j:
 	move t2,zero 	#k = 0
 	sw t2,8($fp)	#k -> 8($fp)
 
-	sw ra,4($fp)	#guardo el ra de j
 	sub.d $f0,$f0,$f0	#acum = 0
 	s.d $f0,($fp) #PREGUNTAAR accum-> fp
 
-	jal _loop_k
+	b _loop_k
 
+_end_loop_j:
 	lw t0,16($fp) #cargo i
 	lw t1,12($fp) #cargo j
 	lw v0,52($fp) #cargo columnas 2
 	mulou v1,v0,t0 # i * columnas 2
 	addu v1,v1,t1 # (i * columnas2)+j #offset
+	mulou v1,v1,8
 
 	l.d $f0,($fp) # accum <- fp
-	la a2,40($fp)
-	addu a2,a2,v0 # mres[offset]
+	lw a2,40($fp)
+	la a2,0(a2)
+	
+	addu a2,a2,v1 # mres[offset]
 	s.d $f0,(a2) 	#mres[offset]=acum
 
 	addu t1,t1,1
 	sw t1,12($fp)	#j++
 
-	blt t1, v1, _loop_j #continuar si j < columnas 2
-	lw ra,4($fp)
-	j ra
+	blt t1, v0, _loop_j #continuar si j < columnas 2
+	b _end_loop_i
 
 _loop_k:
 	l.d $f0,($fp)	#Cargo accum en $f0
@@ -114,17 +98,22 @@ _loop_k:
 
 	mulou v0,t0,t4 	# (i * columnas 1)
 	addu v0,v0,t2 	#(i * columnas 1) + k = pos1
+	mulou v0,v0,8
 
 	mulou v1,t2,t5	#(k * columnas 2)
 	addu v1,v1, t1 	#(k * columnas 2) + j = pos2
+	mulou v1,v1,8 	
 
-	la a0,32($fp)	
+	lw a0,32($fp)
+	la a0,0(a0)	
 	addu a0,a0,v0 	#m1[pos1]
 	l.d $f2,(a0)	# aux 1 = m1[pos1]
 
-	la a1,36($fp)
+	lw a1,36($fp)
+	la a1,0(a1)
 	addu a1,a1,v1 	#m2[pos2]
 	l.d $f4,(a1)	#aux 2 = m2[pos2]
+
 
 	mul.d $f2,$f2,$f4 #m1[pos1] * m2[pos2]
 	add.d $f0,$f0,$f2 	#acum = acum + (m1[pos1] * m2[pos2])
@@ -134,7 +123,7 @@ _loop_k:
 	sw t2,8($fp)	#k++
 
 	blt t2, t4, _loop_k #Seguir si k < columna1
-	j ra
+	b _end_loop_j
 
 _exit:
     #Desarmo el Stack Frame
