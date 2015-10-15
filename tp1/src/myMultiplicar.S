@@ -36,7 +36,6 @@ myMultiplicar:
 	move	t0,zero #i = 0 
 	sw	t0,16($fp)	#i -> 16($fp)
 
-	move v0,t5 		#Resultado = 3
 
 _loop_i:
 	lw t0,16($fp)	#Redundante, t0=i
