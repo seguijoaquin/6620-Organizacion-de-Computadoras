@@ -86,43 +86,54 @@ _end_loop_j:
 	b _end_loop_i
 
 _loop_k:
-	l.d $f0,($fp)	#Cargo accum en $f0
-	lw t0,16($fp)	#Cargo i
-	lw t1,12($fp)	#Cargo j
-	lw t2,8($fp)	#Cargo k
-	
-	lw t3,44($fp)	#Cargo Filas 1
-	lw t4,48($fp)	#Cargo Columnas 1
-	lw t5,52($fp) 	#Cargo Columnas 2
+    l.d $f0,($fp)   #Cargo accum en $f0
+    lw t0,16($fp)   #Cargo i
+    lw t1,12($fp)   #Cargo j
+    lw t2,8($fp)    #Cargo k
 
-	mulou v0,t0,t4 	# (i * columnas 1)
-	addu v0,v0,t2 	#(i * columnas 1) + k = pos1
-	mulou v0,v0,8
+    lw t3,44($fp)   #Cargo Filas 1
+    lw t4,48($fp)   #Cargo Columnas 1
+    lw t5,52($fp)   #Cargo Columnas 2
 
-	mulou v1,t2,t5	#(k * columnas 2)
-	addu v1,v1, t1 	#(k * columnas 2) + j = pos2
-	mulou v1,v1,8 	
+    mulou v0,t0,t4  # (i * columnas 1)
+    addu v0,v0,t2   #(i * columnas 1) + k = pos1
+    mulou v0,v0,8
 
-	lw a0,32($fp)
-	la a0,0(a0)	
-	addu a0,a0,v0 	#m1[pos1]
-	l.d $f2,(a0)	# aux 1 = m1[pos1]
+    mulou v1,t2,t5  #(k * columnas 2)
+    addu v1,v1, t1  #(k * columnas 2) + j = pos2
+    mulou v1,v1,8
 
-	lw a1,36($fp)
-	la a1,0(a1)
-	addu a1,a1,v1 	#m2[pos2]
-	l.d $f4,(a1)	#aux 2 = m2[pos2]
+    lw a0,32($fp)
+    la a0,0(a0)
+    addu a0,a0,v0   #m1[pos1]
+    l.d $f2,(a0)    # aux 1 = m1[pos1]
 
+    sub.d $f6,$f6    #$f6 = 0
+    c.eq.d $f2,$f6   #$f2 == 0?
+    bc1t _end_loop_k #Si multiplico x 0, no sumo
 
-	mul.d $f2,$f2,$f4 #m1[pos1] * m2[pos2]
-	add.d $f0,$f0,$f2 	#acum = acum + (m1[pos1] * m2[pos2])
-	s.d $f0,($fp)	#Guardo el accum
+    lw a1,36($fp)
+    la a1,0(a1)
+    addu a1,a1,v1   #m2[pos2]
+    l.d $f4,(a1)    #aux 2 = m2[pos2]
 
-	addu t2,t2,1
-	sw t2,8($fp)	#k++
+    sub.d $f6,$f6    #$f6 = 0
+    c.eq.d $f4,$f6   #$f4 == 0?
+    bc1t _end_loop_k #Si multiplico x 0, no sumo
 
-	blt t2, t4, _loop_k #Seguir si k < columna1
-	b _end_loop_j
+    #Si llego aca sumo algo
+    mul.d $f2,$f2,$f4 #m1[pos1] * m2[pos2]
+    add.d $f0,$f0,$f2   #acum = acum + (m1[pos1] * m2[pos2])
+
+_end_loop_k:
+    s.d $f0,($fp)   #Guardo el accum
+
+    addu t2,t2,1
+    sw t2,8($fp)    #k++
+
+    blt t2, t4, _loop_k #Seguir si k < columna1
+    b _end_loop_j
+
 
 _exit:
     #Desarmo el Stack Frame
