@@ -154,6 +154,10 @@ int main(int argc, char *argv[]) {
 	int cant, valid;
 	cant =	scanf("%i%*c%i ",&fila1,&columna1);
 	do {
+		if (cant < 0) {
+			fprintf(stderr, "Error interno de lectura.\n");
+			return EXIT_FAILURE;
+		}
 		if (cant != 2) {
 			fprintf(stderr, "Fallo al leer dimensiones\n");
 			return EXIT_FAILURE;
