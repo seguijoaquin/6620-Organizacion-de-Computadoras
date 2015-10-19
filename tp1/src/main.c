@@ -7,16 +7,18 @@
 extern void myMultiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, int columna1,int columna2);
 
 //Funcion que imprime el manual del TP0
-void printManual(){
-	printf("Usage:\n tp1 -h\n");
-	printf(" tp1 -V\n");
-	printf("tp1 < in_file > out_file\n");
-	printf("Options:\n");
-	printf(" -V, --version 	Print version and quit.\n");
-	printf(" -h, --help  	Print this information and quit.\n");
-	printf("Examples:\n");
-	printf(" tp0 < in.txt > out.txt\n");
-	printf("cat in.txt | tp0 > out.txt\n");
+int printManual(){
+	int value = EXIT_SUCCESS;
+	if (printf("Usage:\n tp1 -h\n") < 0) value = EXIT_FAILURE;
+	if (printf(" tp1 -V\n") < 0) value = EXIT_FAILURE;
+	if (printf("tp1 < in_file > out_file\n") < 0) value = EXIT_FAILURE;
+	if (printf("Options:\n") < 0) value = EXIT_FAILURE;
+	if (printf(" -V, --version 	Print version and quit.\n") < 0) value = EXIT_FAILURE;
+	if (printf(" -h, --help  	Print this information and quit.\n") < 0) value = EXIT_FAILURE;
+	if (printf("Examples:\n") < 0) value = EXIT_FAILURE;
+	if (printf(" tp0 < in.txt > out.txt\n") < 0) value = EXIT_FAILURE;
+	if (printf("cat in.txt | tp0 > out.txt\n") < 0) value = EXIT_FAILURE;
+	return value;
 }
 
 void parsearOpciones(int argc, char* argv[]) {
@@ -32,11 +34,11 @@ void parsearOpciones(int argc, char* argv[]) {
     next_option = getopt_long(argc, argv, short_options, long_options, NULL);
     switch (next_option){
       case 'h':   // -h, --help
-  	    printManual();
+  	    if(printManual()) exit(EXIT_FAILURE);
   	    exit(EXIT_SUCCESS);
   	    break;
       case 'V':   // -V, --version
-  	    printf(" Version 2.0 del TP0\n");
+  	    if(printf(" Version 2.0 del TP0\n") < 0) exit(EXIT_FAILURE);
   	    exit(EXIT_SUCCESS);
   	    break;
       case -1:   // Se terminaron las opciones
@@ -91,6 +93,9 @@ int llenarMatriz(double* matriz, int fila, int columna) {
 				} else {
 					j++;
 				}
+			} else if (flag < 0) {
+			// Error interno de scanf
+				exito = false;
 			} else {
 				exito = false;
 			}
