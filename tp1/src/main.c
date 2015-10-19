@@ -101,15 +101,16 @@ int llenarMatriz(double* matriz, int fila, int columna) {
 	return EXIT_SUCCESS;
 }
 
-void mostrarMatriz(double* matriz, int fila, int col)
+int mostrarMatriz(double* matriz, int fila, int col)
 {
-	printf("%dx%d ",fila,col);
+	if(printf("%dx%d ",fila,col) < 0 ) return EXIT_FAILURE;
 	int i;
 	for(i=0; i<fila*col; i++)
 	{
-		printf("%g ",matriz[i]);
+		if( printf("%g ",matriz[i]) < 0) return EXIT_FAILURE;
 	}
 	printf("\n");
+	return EXIT_SUCCESS;
 }
 
 void liberarMatriz(double* matriz, int fila) {
@@ -145,7 +146,7 @@ int main(int argc, char *argv[]) {
 	double* matriz1;
 	int fila1;
 	int columna1;
-	int cant;
+	int cant, valid;
 	cant =	scanf("%i%*c%i ",&fila1,&columna1);
 	do {
 		if (cant != 2) {
@@ -199,11 +200,14 @@ int main(int argc, char *argv[]) {
 			}
 			//Multiplicar
 			myMultiplicar(matriz1, matriz2, matrizRes, fila1, columna1, columna2);
-			mostrarMatriz(matrizRes,fila1,columna2);
+			valid = mostrarMatriz(matrizRes,fila1,columna2);
 
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
 			liberarMatriz(matrizRes,fila1);
+
+			if (valid) return EXIT_FAILURE;
+
 		} else {
 			liberarMatriz(matriz1,fila1);
 			liberarMatriz(matriz2,fila2);
