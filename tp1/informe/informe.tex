@@ -1,6 +1,6 @@
 \documentclass[10pt,a4paper]{article}
 %\usepackage[table]{xcolor}
-%\usepackage{float}
+\usepackage{float}
 \usepackage[spanish]{babel}
 \usepackage{amsmath}
 %\usepackage{amssymb}
@@ -75,9 +75,12 @@ showstringspaces=false            %
 {}
 
 %\title{Multímetros en Corriente Continua}
-\title{Universidad de Buenos Aires - FIUBA \\
+
+\title{\includegraphics[scale=0.3]{images/fiuba.pdf}\\
+		Universidad de Buenos Aires - FIUBA \\
 		66.20 Organización de Computadoras \\
 		Trabajo Práctico 1: Assembly Mips\\}
+
 \author{	Joaquin Segui, \textit{Padrón Nro. 91.451}                     \\
             \texttt{ segui.joaquin@gmail.com }                                          \\[2.5ex]
             Pernin Alejandro, \textit{Padrón Nro. 92.216}                     \\
@@ -87,7 +90,9 @@ showstringspaces=false            %
 \date{}
 
 %\lfoot{asdasd}
-
+\hypersetup{
+	linktoc=all
+}
 
 \begin{document}
 %\includepdf{attachments/caratula.pdf}
@@ -98,22 +103,22 @@ showstringspaces=false            %
 
 \newpage\null\thispagestyle{empty}%\newpage
 
-%\newpage
-%\tableofcontents
+\newpage
+\tableofcontents
 
-%\newpage\null\thispagestyle{empty}\newpage
+\newpage\null\thispagestyle{empty}\newpage
 
 \section{Introducción}
 
-Se implementó un programa, en lenguaje C, que se encarga de multiplicar matrices de números reales, representados en punto flotante de doble precisión. A diferencia del trabajo anterior, la función encargada de la multiplicación de las matrices se encuentra escrita en el lenguaje Assembly Mips.
+Se implementó un programa en lenguaje C, capaz de multiplicar matrices de números reales, representados en punto flotante de doble precisión. A diferencia del trabajo anterior, la función encargada de la multiplicación de las matrices se encuentra escrita en el lenguaje Assembly MIPS.
 
 
 \section{Diseño e Implementación}
 
-Dada las limitaciones del assembly Mips, fue necesario realizar algunos cambios respecto de la entrega anterior
+Dada las limitaciones del assembly MIPS, fue necesario realizar algunos cambios respecto de la entrega anterior
 
 \begin{itemize}
-	\item Representar las matrices como un unico arreglo de doubles.
+	\item Representar las matrices como un único arreglo de doubles.
 	\item Diseñar el manejo de los argumentos mediante el stack.
 	\item Modificar el algoritmo de multiplicación para contemplar errores de MIPS\footnote{Ver sección \ref{sec:MIPS}}.
 \end{itemize}
@@ -144,6 +149,14 @@ Para manejar diversas variables dentro del programa, se utilizo un Stack Frame d
 
 Alli se alojan los valores empleados para los controles de los ciclos y el acumulador auxiliar para la multiplicación. Si bien la posición 4 no se utiliza, el frame debe ser multiplo de 8 bytes y por ello se mantienen los 32 bytes.
 
+Las direcciones 32..52 corresponden a los argumentos pasados por el \textit{caller} de la función. Las direcciones 0..28 son utilizados por la función de multiplicación con la siguiente finalidad\footnote{Ver código fuente en sección \ref{sec:mips_src}}:.
+
+\begin{itemize}
+	\item \textbf{i,j,k:} Las variables empleadas para controlar los ciclos \textit{for}.
+	\item \textbf{accum:} El acumulador parcial de la multiplicación de los elementos de las matrices.
+	\item \textbf{ra,fp,gp:} Para ser consistente con la convención ABI.
+\end{itemize}
+
 \section{Comandos para compilar el programa}
 	\subsection{Copiar a VM}
 		Dado que el programa se corre dentro de la maquina virtual gxemul, se facilita un script en bash que copia el contenido de la carpeta en el guest (considerando la configuración default vista en clase). Para ello invocar desde el host
@@ -158,7 +171,7 @@ Alli se alojan los valores empleados para los controles de los ciclos y el acumu
 		make
 		\end{bash}
 
-		Asimismo se proviciona un script que realiza pruebas con un set de datos preexistente, para invocarlo: 
+		Asimismo se provee un script que realiza pruebas con un set de datos preexistente, para invocarlo: 
 		\begin{bash}
 		bash pruebas_mips.sh
 		\end{bash}
@@ -166,7 +179,7 @@ Alli se alojan los valores empleados para los controles de los ciclos y el acumu
 \section{Pruebas}
 	En esta sección se detallarán las pruebas realizadas. Los archivos utilizados se encuentran el el directorio \textit{test\_files}.
 	\subsection{Casos Exitosos}
-		Los casos exitosos están comprendidos por los set de datos \textit{test1} y \	textit{test2}.	
+		Los casos exitosos están comprendidos por los set de datos \textit{test 1,2,7,8}.	
 		En el caso del	 primero:\	
 	
 		\lstinputlisting[basicstyle=\footnotesize]{../src/test_files/test1.txt}
@@ -193,8 +206,8 @@ Alli se alojan los valores empleados para los controles de los ciclos y el acumu
 		1x3 11 2 10
 		\end{bash}
 	
-		como es esperable.\\
-	
+		%como es esperable.\\
+		%--------------------------
 		El segundo set de datos es:
 		\lstinputlisting[basicstyle=\footnotesize]{../src/test_files/test2.txt}
 	
@@ -231,9 +244,24 @@ Alli se alojan los valores empleados para los controles de los ciclos y el acumu
 		cuya salida se obtuvo correctamente
 		
 		\begin{bash}
-		3x3 2.22507e-308 3 1 3.33761e-308 6 2 4.45015e-308 9 3 
+		3x3 0 3 1 0 6 2 0 9 3 
 		1x3 16 3 4
 		\end{bash}
+
+		%--------------------------------------
+		El set de prueba \textit{test7.txt}
+		\lstinputlisting[basicstyle=\footnotesize]{../src/test_files/test7.txt}
+		\begin{bash}
+		1x3 -11.43 10.6 -14.25 
+		\end{bash}
+
+		%--------------------------------------
+		El set de prueba \textit{test8.txt}
+		\lstinputlisting[basicstyle=\footnotesize]{../src/test_files/test8.txt}
+		\begin{bash}
+		1x3 0 10.6 -14.25 
+		\end{bash}
+
 
 	\subsection{Casos de error}
 		Como casos de error del programa probamos matrices incompatibles para su multiplicacion y matrices mal definidas.
@@ -296,7 +324,7 @@ Alli se alojan los valores empleados para los controles de los ciclos y el acumu
 
 		Para rastrear el origen de dicho problema se hicieron diveros prints y luego se empleó una prueba unitaria para ejemplificar dicho inconveniente (\textit{comportamiento\_mips.c)}. 
 
-		\begin{figure}[h]
+		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.45]{images/raro.png}\caption{Prueba Comportamiento Mips}
 		\end{figure}
@@ -305,12 +333,14 @@ Alli se alojan los valores empleados para los controles de los ciclos y el acumu
 
 		Para evitar este comportamiento, el algoritmo compara si alguno de los elementos de las matrices a ser multiplicado es nulo. De serlo, el acumulador permanece igual y se continua en el siguiente ciclo. De esta manera el acumulador se mantiene inalterado por dicho comportamiento.
 
+		No fue posible corroborar si este problema es inherente a la arquitectura, \textit{NetBSD} o el emulador.
+
 \section{Conclusiones}
-	Mediante el estudio e implementación de algoritmos en assembly MIPS, pudimos observar cómo funciones sencillas en un lenguaje de alto nivel (desde este punto de vista) se traducen en múltiples instrucciones de bajo nivel en diversas ocasiones siendo éste mucho más complejo.
+	Mediante el estudio e implementación de algoritmos en assembly MIPS, pudimos observar cómo funciones sencillas (y potentes) en un lenguaje de alto nivel (desde este punto de vista) se traducen en múltiples instrucciones elementales de bajo nivel. 
 
-	Asimismo entendimos la importancia de establecer convenciones a la hora de realizar llamadas entre funciones para que dichas no sólo puedan realizarse pasajes de argumentos y resultados, sino para que durante el funcionamiento de una de ellas no afecte de manera indebida la otra.
+	Asimismo entendimos la importancia de establecer convenciones a la hora de realizar llamadas entre funciones para que las mismas además de realizar pasajes de argumentos y resultados entre sí, puedan desarrollarse sin afectar indebidamente el funcionamiento de la otra y causar conflictos.
 
-	A lo largo del desarrollo de este TP, como guía observamos y estudiamos el código assembly obtenido mediante el compilador de diversos programas sencillos, resultando de gran utilidad.
+	A lo largo del desarrollo de este TP, como guía observamos y estudiamos el código assembly obtenido mediante el compilador de diversos programas compactos escritos en C, resultando de gran utilidad.
 
 \newpage
 \section{Codigo fuente del programa}
@@ -331,7 +361,7 @@ Alli se alojan los valores empleados para los controles de los ciclos y el acumu
 			]{../src/main.c}
 
 \newpage
-\subsection{Funcion en MIPS32}
+\subsection{Funcion en MIPS32}\label{sec:mips_src}
 
 \lstinputlisting[
 			language=Assembler,
