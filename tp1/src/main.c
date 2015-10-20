@@ -9,15 +9,19 @@ extern void myMultiplicar(double* matriz1, double* matriz2, double* matrizRes,in
 //Funcion que imprime el manual del TP0
 int printManual(){
 	int value = EXIT_SUCCESS;
-	if (printf("Usage:\n tp1 -h\n") < 0) value = EXIT_FAILURE;
-	if (printf(" tp1 -V\n") < 0) value = EXIT_FAILURE;
-	if (printf("tp1 < in_file > out_file\n") < 0) value = EXIT_FAILURE;
-	if (printf("Options:\n") < 0) value = EXIT_FAILURE;
-	if (printf(" -V, --version 	Print version and quit.\n") < 0) value = EXIT_FAILURE;
-	if (printf(" -h, --help  	Print this information and quit.\n") < 0) value = EXIT_FAILURE;
-	if (printf("Examples:\n") < 0) value = EXIT_FAILURE;
-	if (printf(" tp0 < in.txt > out.txt\n") < 0) value = EXIT_FAILURE;
-	if (printf("cat in.txt | tp0 > out.txt\n") < 0) value = EXIT_FAILURE;
+	int res = printf("Usage:\n tp1 -h\n"
+				" tp1 -V\n"
+				"tp1 < in_file > out_file\n"
+				"Options:\n"
+				" -V, --version 	Print version and quit.\n"
+				" -h, --help  	Print this information and quit.\n"
+				"Examples:\n"
+				" tp0 < in.txt > out.txt\n"
+				"cat in.txt | tp0 > out.txt\n");
+	if (res < 0)
+	{
+		value = EXIT_FAILURE;
+	}
 	return value;
 }
 
@@ -146,7 +150,7 @@ void multiplicar(double* matriz1, double* matriz2, double* matrizRes,int fila1, 
 }
 
 int main(int argc, char *argv[]) {
-  parsearOpciones(argc,argv);
+  	parsearOpciones(argc,argv);
 	//Construyo la primera matriz
 	double* matriz1;
 	int fila1;
