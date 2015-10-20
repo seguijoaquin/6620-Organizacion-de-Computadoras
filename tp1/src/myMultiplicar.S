@@ -74,7 +74,7 @@ _end_loop_j:
 
 	l.d $f0,($fp) # accum <- fp
 	lw a2,40($fp)
-	la a2,0(a2)
+	#la a2,0(a2)	#Innecesario
 	
 	addu a2,a2,v1 # mres[offset]
 	s.d $f0,(a2) 	#mres[offset]=acum
@@ -104,7 +104,7 @@ _loop_k:
     mulou v1,v1,8
 
     lw a0,32($fp)
-    la a0,0(a0)
+    #la a0,0(a0)	#Innecesario
     addu a0,a0,v0   #m1[pos1]
     l.d $f2,(a0)    # aux 1 = m1[pos1]
 
@@ -113,7 +113,7 @@ _loop_k:
     bc1t _end_loop_k #Si multiplico x 0, no sumo
 
     lw a1,36($fp)
-    la a1,0(a1)
+    #la a1,0(a1)	#Innecesario
     addu a1,a1,v1   #m2[pos2]
     l.d $f4,(a1)    #aux 2 = m2[pos2]
 
