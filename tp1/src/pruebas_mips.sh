@@ -21,3 +21,9 @@ printf "\n\nCaso elementos < dimension definida test5\n"
 
 printf "\n\nCaso elementos > dimension definida test6\n"
 ./tp1.out < test_files/test6.txt
+
+printf "\n\nPrueba doubles varios\n"
+./tp1.out < test_files/test7.txt
+
+printf "\n\nPrueba doubles varios 2\n"
+./tp1.out < test_files/test8.txt
